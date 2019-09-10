@@ -52,16 +52,15 @@ async def publish(queue, n):
         n (int): Number of messages to publish.
     """
     choices = string.ascii_lowercase + string.digits
+
     for x in range(1, n + 1):
         host_id = ''.join(random.choices(choices, k=4))
         instance_name = f'cattle-{host_id}'
         msg = PubSubMessage(message_id=x, instance_name=instance_name)
-        # publish an item
         await queue.put(msg)
         logging.info(f'Published {x} of {n} messages')
 
-    # indicate the publisher is done
-    await queue.put(None)
+    await queue.put(None)  # publisher is done
 
 
 async def consume(queue):

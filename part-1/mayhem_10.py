@@ -40,7 +40,7 @@ class PubSubMessage:
     hostname      = attr.ib(repr=False, init=False)
     restarted     = attr.ib(repr=False, default=False)
     saved         = attr.ib(repr=False, default=False)
-    acked         = attr.ib(repr=False, default=False)
+    asked         = attr.ib(repr=False, default=False)
     extended_cnt  = attr.ib(repr=False, default=0)
 
     def __attrs_post_init__(self):
@@ -104,8 +104,8 @@ async def cleanup(msg, event):
     await event.wait()
     # unhelpful simulation of i/o work
     await asyncio.sleep(random.random())
-    msg.acked = True
-    logging.info(f"Done. Acked {msg}")
+    msg.asked = True
+    logging.info(f"Done. Asked {msg}")
 
 
 async def extend(msg, event):

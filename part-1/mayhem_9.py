@@ -21,7 +21,6 @@ import uuid
 
 import attr
 
-
 # NB: Using f-strings with log messages may not be ideal since no matter
 # what the log level is set at, f-strings will always be evaluated
 # whereas the old form ("foo %s" % "bar") is lazily-evaluated.
@@ -40,12 +39,11 @@ class PubSubMessage:
     hostname      = attr.ib(repr=False, init=False)
     restarted     = attr.ib(repr=False, default=False)
     saved         = attr.ib(repr=False, default=False)
-    acked         = attr.ib(repr=False, default=False)
+    asked         = attr.ib(repr=False, default=False)
     extended_cnt  = attr.ib(repr=False, default=0)
 
     def __attrs_post_init__(self):
         self.hostname = f"{self.instance_name}.example.net"
-
 
 
 async def publish(queue):
@@ -102,8 +100,8 @@ async def cleanup(msg):
     """
     # unhelpful simulation of i/o work
     await asyncio.sleep(random.random())
-    msg.acked = True
-    logging.info(f"Done. Acked {msg}")
+    msg.asked = True
+    logging.info(f"Done. Asked {msg}")
 
 
 async def extend(msg, event):

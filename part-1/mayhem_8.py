@@ -41,7 +41,7 @@ class PubSubMessage:
     hostname      = attr.ib(repr=False, init=False)
     restarted     = attr.ib(repr=False, default=False)
     saved         = attr.ib(repr=False, default=False)
-    acked         = attr.ib(repr=False, default=False)
+    asked         = attr.ib(repr=False, default=False)
 
     def __attrs_post_init__(self):
         self.hostname = f"{self.instance_name}.example.net"
@@ -99,8 +99,8 @@ async def cleanup(msg):
     """
     # unhelpful simulation of i/o work
     await asyncio.sleep(random.random())
-    msg.acked = True
-    logging.info(f"Done. Acked {msg}")
+    msg.asked = True
+    logging.info(f"Done. Asked {msg}")
 
 
 async def handle_message(msg):

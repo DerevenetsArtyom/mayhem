@@ -21,7 +21,6 @@ import uuid
 
 import attr
 
-
 # NB: Using f-strings with log messages may not be ideal since no matter
 # what the log level is set at, f-strings will always be evaluated
 # whereas the old form ("foo %s" % "bar") is lazily-evaluated.
@@ -47,7 +46,6 @@ class PubSubMessage:
         self.hostname = f"{self.instance_name}.example.net"
 
 
-
 async def publish(queue):
     """Simulates an external publisher of messages.
 
@@ -61,8 +59,8 @@ async def publish(queue):
         host_id = "".join(random.choices(choices, k=4))
         instance_name = f"cattle-{host_id}"
         msg = PubSubMessage(message_id=msg_id, instance_name=instance_name)
-        # publish an item
-        asyncio.create_task(queue.put(msg))
+
+        asyncio.create_task(queue.put(msg))  # publish an item
         logging.debug(f"Published message {msg}")
         # simulate randomness of publishing messages
         await asyncio.sleep(random.random())
@@ -100,7 +98,7 @@ async def cleanup(msg, event):
         msg (PubSubMessage): consumed event message that is done being
             processed.
     """
-    # this will block the rest of the coro until `event.set` is called
+    # this will block the rest of the coroutine until `event.set` is called
     await event.wait()
     # unhelpful simulation of i/o work
     await asyncio.sleep(random.random())
@@ -113,7 +111,7 @@ async def extend(msg, event):
 
     Args:
         msg (PubSubMessage): consumed event message to extend.
-        event (asyncio.Event): event to watch for message extention or
+        event (asyncio.Event): event to watch for message extension or
             cleaning up.
     """
     while not event.is_set():
